@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Address</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 80px; }
+    textarea { width: 400px; height: 100px; padding: 10px; }
+    button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Enter Customer Full Address</h2>
+  <textarea id="addressInput" placeholder="Type full address here..."></textarea><br>
+  <button onclick="verifyAddress()">Verify</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function verifyAddress() {
+      const address = document.getElementById("addressInput").value;
+      if (!address) {
+        alert("Please enter an address first!");
+        return;
+      }
+
+      document.getElementById("result").innerText = "Verifying...";
+
+      // 🔹 For now: demo response (AI/backend not yet connected)
+      // Later: call your API endpoint here
+      setTimeout(() => {
+        document.getElementById("result").innerText = 
+          "✅ Verified Address:\n" + address + "\n\n(This is demo – will connect AI soon)";
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
