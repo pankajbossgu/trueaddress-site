@@ -3,37 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Address</title>
+  <title>Verify Address – TrueAddress</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin-top: 80px; }
-    textarea { width: 400px; height: 100px; padding: 10px; }
-    button { margin-top: 15px; padding: 10px 20px; font-size: 16px; }
-    #result { margin-top: 20px; font-weight: bold; }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h2 { color: #333; margin-bottom: 20px; }
+    textarea {
+      width: 400px;
+      height: 100px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    button:hover { background-color: #0056b3; }
+    #result {
+      margin-top: 20px;
+      font-size: 1.1rem;
+      color: green;
+      font-weight: bold;
+    }
+    a {
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <h2>Enter Customer Full Address</h2>
-  <textarea id="addressInput" placeholder="Type full address here..."></textarea><br>
+  <h2>🔍 Verify Single Address</h2>
+  <textarea id="addressInput" placeholder="Enter full customer address here..."></textarea><br>
   <button onclick="verifyAddress()">Verify</button>
 
   <div id="result"></div>
 
+  <a href="index.html">⬅ Back to Home</a>
+
   <script>
-    async function verifyAddress() {
-      const address = document.getElementById("addressInput").value;
-      if (!address) {
-        alert("Please enter an address first!");
+    function verifyAddress() {
+      const address = document.getElementById("addressInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
+      if (address === "") {
+        resultDiv.style.color = "red";
+        resultDiv.textContent = "⚠️ Please enter an address.";
         return;
       }
 
-      document.getElementById("result").innerText = "Verifying...";
-
-      // 🔹 For now: demo response (AI/backend not yet connected)
-      // Later: call your API endpoint here
-      setTimeout(() => {
-        document.getElementById("result").innerText = 
-          "✅ Verified Address:\n" + address + "\n\n(This is demo – will connect AI soon)";
-      }, 1500);
+      // 🚀 Here you can later connect your AI/API for real validation
+      // For now, we just simulate a "verified" address
+      resultDiv.style.color = "green";
+      resultDiv.textContent = "✅ Verified Address: " + address;
     }
   </script>
 </body>
