@@ -3,49 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Address – TrueAddress</title>
+  <title>Single Address Verification – TrueAddress</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f5f7fa;
       margin: 0;
-      padding: 0;
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
     }
     h2 { color: #333; margin-bottom: 20px; }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
+    input, button {
       padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
+      margin: 10px 0;
       border-radius: 8px;
-      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
     }
     button {
       background-color: #007bff;
       color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
       cursor: pointer;
-      font-size: 1rem;
       font-weight: bold;
     }
     button:hover { background-color: #0056b3; }
     #result {
-      margin-top: 25px;
-      width: 90%;
-      max-width: 500px;
-      font-size: 1.05rem;
-      color: green;
-      font-weight: bold;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff;
+      width: 95%;
+      max-width: 600px;
+      font-size: 1rem;
+      color: black;
       text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       white-space: pre-wrap;
     }
     a {
@@ -57,47 +51,44 @@
   </style>
 </head>
 <body>
-  <h2>🔍 Verify Single Address</h2>
-  <textarea id="addressInput" placeholder="Enter full customer address here..."></textarea><br>
-  <button onclick="verifyAddress()">Verify</button>
-
-  <div id="result"></div>
+  <h2>🏠 Single Address Verification</h2>
+  
+  <input type="text" id="addressInput" placeholder="Enter address here" size="50">
+  <button onclick="verifyAddress()">Verify Address</button>
+  
+  <div id="result">Result will appear here...</div>
   <a href="index.html">⬅ Back to Home</a>
 
   <script>
-    async function verifyAddress() {
-      const address = document.getElementById("addressInput").value.trim();
-      const resultDiv = document.getElementById("result");
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbwfQBvDHV4b7JDZhUN62B7oVLhxJibNdVewU6eLSr2DI8VN_cy1r61khxkdEddGsw4wOA/exec";
+    // 🔗 Replace with your Apps Script Web App URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwfQBvDHV4b7JDZhUN62B7oVLhxJibNdVewU6eLSr2DI8VN_cy1r61khxkdEddGsw4wOA/exec";
 
-      if (!address) {
-        resultDiv.style.color = "red";
-        resultDiv.textContent = "⚠️ Please enter an address.";
+    async function verifyAddress() {
+      const addr = document.getElementById("addressInput").value.trim();
+      if (!addr) {
+        alert("Please enter an address.");
         return;
       }
 
-      resultDiv.style.color = "black";
-      resultDiv.textContent = "⏳ Verifying address...";
+      document.getElementById("result").innerHTML = "⏳ Verifying... please wait.";
 
       try {
-        const resp = await fetch(webAppUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ address: address })
+        const response = await fetch(webAppUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address: addr })
         });
-        const data = await resp.json();
+
+        const data = await response.json();
 
         if (data.verified) {
-          resultDiv.style.color = "green";
-          resultDiv.innerHTML = `✅ Verified Address:\n${data.formattedAddress}\n\nDistrict: ${data.district}  •  State: ${data.state}\nPIN: ${data.pin || 'N/A'}\n\nRemarks: ${(data.remarks || []).join(', ')}`;
+          document.getElementById("result").innerHTML =
+            `✅ Verified Address:\n${data.formattedAddress}\n\n📌 PIN: ${data.pin}\n🏢 District: ${data.district}\n🌍 State: ${data.state}\n\nRemarks: ${(data.remarks || []).join(", ")}`;
         } else {
-          resultDiv.style.color = "orange";
-          resultDiv.innerHTML = `⚠️ Not verified:\n${(data.message || (data.remarks || []).join(', ') || data.error)}\n\n${JSON.stringify(data, null, 2)}`;
+          document.getElementById("result").innerHTML = `❌ Not Verified\nReason: ${data.message || data.error}`;
         }
       } catch (err) {
-        resultDiv.style.color = "red";
-        resultDiv.textContent = "❌ Verification failed — network or CORS error.";
-        console.error("Fetch error:", err);
+        document.getElementById("result").innerHTML = `⚠️ Error: ${err.message}`;
       }
     }
   </script>
