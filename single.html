@@ -1,108 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify Address – TrueAddress</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f7fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h2 { color: #333; margin-bottom: 20px; }
-    textarea {
-      width: 90%;
-      max-width: 500px;
-      height: 100px;
-      padding: 10px;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 15px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: bold;
-    }
-    button:hover { background-color: #0056b3; }
-    #result {
-      margin-top: 25px;
-      width: 90%;
-      max-width: 500px;
-      font-size: 1.05rem;
-      font-weight: bold;
-      text-align: left;
-      white-space: pre-wrap;
-    }
-    a {
-      margin-top: 20px;
-      text-decoration: none;
-      color: #007bff;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Address – TrueAddress</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h2 { color: #333; margin-bottom: 20px; }
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    button:hover { background-color: #0056b3; }
+    #result {
+      margin-top: 25px;
+      width: 90%;
+      max-width: 500px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+    a {
+      margin-top: 20px;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h2>🔍 Verify Single Address</h2>
-  <textarea id="addressInput" placeholder="Enter full customer address here..."></textarea><br>
-  <button onclick="verifyAddress()">Verify</button>
+  <h2>🔍 Verify Single Address</h2>
+  <textarea id="addressInput" placeholder="Enter full customer address here..."></textarea><br>
+  <button onclick="verifyAddress()">Verify</button>
 
-  <div id="result"></div>
-  <a href="index.html">⬅ Back to Home</a>
+  <div id="result"></div>
+  <a href="index.html">⬅ Back to Home</a>
 
-  <script>
-    async function verifyAddress() {
-      const address = document.getElementById("addressInput").value.trim();
-      const resultDiv = document.getElementById("result");
+  <script>
+    async function verifyAddress() {
+      const address = document.getElementById("addressInput").value.trim();
+      const resultDiv = document.getElementById("result");
 
-      // 🔗 Replace with your Apps Script deployed URL
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbxQD7yIa9t8CH6-hbB818ic-Dzi4VcLjqUsAEGZhgOTyLU65NKhIfgDt5sTM56JUqAHTw/exec";
+      // 🔗 CORRECTED: Your specific Apps Script deployed URL
+      const webAppUrl = "https://script.google.com/macros/s/AKfycby8-fclH_GxL4Sw59LIOIV53yNY1WnLjcMfLmiOx6BxWU5MqhzJ908pQ13B4dMX1BQe/exec";
 
-      if (!address) {
-        resultDiv.style.color = "red";
-        resultDiv.textContent = "⚠️ Please enter an address.";
-        return;
-      }
+      if (!address) {
+        resultDiv.style.color = "red";
+        resultDiv.textContent = "⚠️ Please enter an address.";
+        return;
+      }
 
-      resultDiv.style.color = "black";
-      resultDiv.textContent = "⏳ Verifying address...";
+      resultDiv.style.color = "black";
+      resultDiv.textContent = "⏳ Verifying address...";
 
-      try {
-        const resp = await fetch(webAppUrl, {
-          method: 'POST',
-          mode: 'cors',   // 👈 important
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ address: address })
-        });
+      try {
+        const resp = await fetch(webAppUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: address,
+        });
 
-        const data = await resp.json();
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
 
-        if (data.verified) {
-          resultDiv.style.color = "green";
-          resultDiv.innerHTML = `✅ Verified Address:\n${data.formattedAddress}\n\nDistrict: ${data.district} • State: ${data.state}\nPIN: ${data.pin || 'N/A'}\n\nRemarks: ${(data.remarks || []).join(', ')}`;
-        } else {
-          resultDiv.style.color = "orange";
-          resultDiv.innerHTML = `⚠️ Not verified:\n${data.message || JSON.stringify(data, null, 2)}`;
-        }
-      } catch (err) {
-        resultDiv.style.color = "red";
-        resultDiv.textContent = "❌ Verification failed — network or CORS error.";
-        console.error("Fetch error:", err);
-      }
-    }
-  </script>
+        const data = await resp.json();
+        
+        if (data.error) {
+          resultDiv.style.color = "red";
+          resultDiv.textContent = `❌ Verification failed:\n${data.error}`;
+        } else {
+          resultDiv.style.color = "green";
+          resultDiv.innerHTML = `✅ Verified Address:<br>${data.verifiedAddress}<br><br>District: ${data.district} • State: ${data.state}<br>PIN: ${data.pin || 'N/A'}<br><br>Remarks: ${data.remarks}`;
+        }
+
+      } catch (err) {
+        resultDiv.style.color = "red";
+        resultDiv.textContent = "❌ Verification failed — network or server error.";
+        console.error("Fetch error:", err);
+      }
+    }
+  </script>
 </body>
 </html>
