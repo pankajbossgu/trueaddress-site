@@ -3,31 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TrueAddress - Smart Address Verification</title>
+  <title>TrueAddress – AI Address Verification</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f7f9fc;
-      text-align: center;
-      padding: 50px;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
+
     h1 {
       color: #333;
+      margin-bottom: 10px;
     }
+
+    p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
     .btn {
       display: inline-block;
-      margin: 15px;
-      padding: 15px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      text-decoration: none;
-      background: #0078ff;
+      background-color: #007bff;
       color: white;
+      padding: 14px 24px;
+      margin: 10px;
       border-radius: 8px;
-      transition: 0.3s;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: background-color 0.3s;
     }
+
     .btn:hover {
-      background: #005fcc;
+      background-color: #0056b3;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #777;
     }
   </style>
 </head>
@@ -35,11 +56,13 @@
   <h1>🚀 Welcome to TrueAddress</h1>
   <p>AI-powered Address Verification – Fast, Reliable, Accurate</p>
 
-  <a href="#" class="btn">🔍 Verify Single Address</a>
-  <a href="#" class="btn">📂 Upload Bulk Addresses</a>
+  <div>
+    <a href="single.html" class="btn">🔍 Verify Single Address</a>
+    <a href="bulk.html" class="btn">📂 Upload Bulk Addresses</a>
+  </div>
 
-  <p style="margin-top:40px; font-size:14px; color:#777;">
+  <footer>
     © 2025 TrueAddress. All rights reserved.
-  </p>
+  </footer>
 </body>
 </html>
