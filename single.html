@@ -43,7 +43,6 @@
       width: 90%;
       max-width: 500px;
       font-size: 1.05rem;
-      color: green;
       font-weight: bold;
       text-align: left;
       white-space: pre-wrap;
@@ -68,7 +67,9 @@
     async function verifyAddress() {
       const address = document.getElementById("addressInput").value.trim();
       const resultDiv = document.getElementById("result");
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbxoBoB9IRZB99XhYhy5v_S7KP3DWOiS8Hv4LQzmPXC6k36r1F50kGOY-1lRpDoSZbge9w/exec";
+
+      // 🔗 Replace with your Apps Script deployed URL
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbxQD7yIa9t8CH6-hbB818ic-Dzi4VcLjqUsAEGZhgOTyLU65NKhIfgDt5sTM56JUqAHTw/exec";
 
       if (!address) {
         resultDiv.style.color = "red";
@@ -82,6 +83,7 @@
       try {
         const resp = await fetch(webAppUrl, {
           method: 'POST',
+          mode: 'cors',   // 👈 important
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ address: address })
         });
@@ -90,10 +92,10 @@
 
         if (data.verified) {
           resultDiv.style.color = "green";
-          resultDiv.innerHTML = `✅ Verified Address:\n${data.formattedAddress}\n\nDistrict: ${data.district}  •  State: ${data.state}\nPIN: ${data.pin || 'N/A'}\n\nRemarks: ${(data.remarks || []).join(', ')}`;
+          resultDiv.innerHTML = `✅ Verified Address:\n${data.formattedAddress}\n\nDistrict: ${data.district} • State: ${data.state}\nPIN: ${data.pin || 'N/A'}\n\nRemarks: ${(data.remarks || []).join(', ')}`;
         } else {
           resultDiv.style.color = "orange";
-          resultDiv.innerHTML = `⚠️ Not verified:\n${(data.message || (data.remarks || []).join(', ') || data.error)}\n\n${JSON.stringify(data, null, 2)}`;
+          resultDiv.innerHTML = `⚠️ Not verified:\n${data.message || JSON.stringify(data, null, 2)}`;
         }
       } catch (err) {
         resultDiv.style.color = "red";
